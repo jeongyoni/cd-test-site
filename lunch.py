@@ -19,6 +19,12 @@ def send_to_teams(day, menu):
                             "type": "TextBlock",
                             "wrap": True,
                             "text": menu
+                        },
+                        {
+                            "type": "TextBlock",
+                            "wrap": True,
+                            "spacing": "Small",
+                            "text": f"출처: {MENU_URL}"
                         }
                     ]
                 }
@@ -26,8 +32,11 @@ def send_to_teams(day, menu):
         ]
     }
 
-    requests.post(
+    res = requests.post(
         TEAMS_WEBHOOK_URL,
         json=payload,
         timeout=10
-    ).raise_for_status()
+    )
+    print(res.status_code)
+    print(res.text)
+    res.raise_for_status()
