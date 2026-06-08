@@ -30,7 +30,7 @@ SCRAPE_HEADERS = {
 }
 
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
-TEAMS_WEBHOOK = os.environ.get("TEAMS_WEBHOOK")
+TEAMS_WEBHOOK = os.environ.get("TEAMS_WEBHOOK_URL")  # 예: "https://outlook.office.com/webhook/..."
 
 
 # ─────────────────────────────────────────────
