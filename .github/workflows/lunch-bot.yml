@@ -1,0 +1,23 @@
+name: Lunch Bot
+
+on:
+  schedule:
+    - cron: '30 11 * * 1-5'
+  workflow_dispatch:
+
+jobs:
+  lunch:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install packages
+        run: |
+          pip install requests beautifulsoup4
+
+      - name: Run Lunch Bot
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
+        run: |
+          python lunch.py
