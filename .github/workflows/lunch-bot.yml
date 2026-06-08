@@ -2,27 +2,43 @@ name: Lunch Bot
 
 on:
   schedule:
-    - cron: '30 2 * * 1-5'
+    - cron: "0 0 * * 1-5"   # 한국시간 오전 9시 = UTC 00시
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   lunch:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: 코드 체크아웃
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
+      - name: Python 설정
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
-      - name: Install packages
+      - name: 의존성 설치
         run: |
-          python -m pip install --upgrade pip
           pip install requests beautifulsoup4
 
-      - name: Run Lunch Bot
+      - name: 점심 메뉴 알림
         env:
           TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           python lunch.py
+
+      - name: 이미지·캐시 커밋
+        run: |
+          git config user.name "lunch-bot"
+          git config user.email "bot@users.noreply.github.com"
+
+          if [ -d "data" ]; then git add data; fi
+          if [ -d "images" ]; then git add images; fi
+
+          git diff --staged --quiet || git commit -m "lunch: ${{ github.run_id }}"
+          git push
