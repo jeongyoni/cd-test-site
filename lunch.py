@@ -37,6 +37,6 @@ def send_to_teams(day, menu):
         json=payload,
         timeout=10
     )
-    print(res.status_code)
-    print(res.text)
+    print("STATUS:", res.status_code)
+    print("BODY:", res.text)
     res.raise_for_status()
